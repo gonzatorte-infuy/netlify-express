@@ -16,10 +16,11 @@ const upload = multer({ storage });
 
 // const router = express.Router();
 app.post("/plainAddPlaceholder", upload.single("pdf"), (req, res) => {
+  const signatureLength = parseInt(req.query.signatureLength || 12915, 10);
   const pdfBuffer = plainAddPlaceholder({
     pdfBuffer: req.file.buffer,
     reason: "I have reviewed it.",
-    signatureLength: 1612
+    signatureLength,
   });
   res.type("pdf");
   res.send(pdfBuffer);
