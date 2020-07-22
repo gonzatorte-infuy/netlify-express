@@ -14,8 +14,8 @@ app.use(bodyParser.json());
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-// const router = express.Router();
-app.post("/plainAddPlaceholder", upload.single("pdf"), (req, res) => {
+const router = express.Router();
+router.post("/plainAddPlaceholder", upload.single("pdf"), (req, res) => {
   const signatureLength = parseInt(req.query.signatureLength || 12915, 10);
   const pdfBuffer = plainAddPlaceholder({
     pdfBuffer: req.file.buffer,
@@ -25,17 +25,17 @@ app.post("/plainAddPlaceholder", upload.single("pdf"), (req, res) => {
   res.type("pdf");
   res.send(pdfBuffer);
 });
-app.get("*", (req, res) => {
+router.get("*", (req, res) => {
   // res.writeHead(200, { 'Content-Type': 'text/html' });
   // res.write('<h1>Hello from Express.js!</h1>');
   res.send("Nothing here!");
 });
-app.post("*", (req, res) => {
+router.post("*", (req, res) => {
   // res.writeHead(200, { 'Content-Type': 'text/html' });
   // res.write('<h1>Hello from Express.js!</h1>');
   res.send("Nothing here!");
 });
-// app.use('/.netlify/functions/server', router);  // path must route to lambda
+app.use('/.netlify/functions/server', router);
 
 module.exports = app;
 module.exports.handler = serverless(app);
